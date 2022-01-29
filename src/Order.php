@@ -2,17 +2,24 @@
 
 class Order
 {
-    public $amount = 0;
+    public float $amount = 0;
+    public int $quantity;
+    public float $unitPrice;
 
-    protected PaymentGateway $gateway;
-
-    public function __construct(PaymentGateway $gateway)
+    public function __construct(int $quantity, float $unitPrice)
     {
-        $this->gateway = $gateway;
+        $this->quantity = $quantity;
+        $this->unitPrice = $unitPrice;
+
+        $this->amount = $quantity * $unitPrice;
     }
 
-    public function proccess()
+    /**
+     * @param PaymentGateway $gateway
+     * @return mixed
+     */
+    public function proccess(PaymentGateway $gateway)
     {
-        return $this->gateway->charge($this->amount);
+        return $gateway->charge($this->amount);
     }
 }

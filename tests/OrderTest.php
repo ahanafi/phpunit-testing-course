@@ -9,33 +9,28 @@ class OrderTest extends TestCase
         Mockery::close();
     }
 
-    public function testOrderIsProcessed(): void
+    public function testOrderIsProcessedUsingAMock(): void
     {
-        $gateway = $this->getMockBuilder('PaymentGateway')
-            ->setMethods(['charge'])
-            ->getMock();
+        $order = new Order(10, 1200);
+        self::assertEquals(12000, $order->amount);
 
-        $gateway->expects($this->once())
-            ->method('charge')
-            ->with($this->equalTo(200))
-            ->willReturn(true);
-
-        $order = new Order($gateway);
-        $order->amount = 200;
-        self::assertTrue($order->proccess());
+        $mockGateway = Mockery::mock('PaymentGateway');
+        $mockGateway->expects('charge')
+            ->once()
+            ->andReturn(true);
+        $order->proccess($mockGateway);
     }
 
-    public function testOrderIsProcessedUsingMockery(): void
+    public function testOrderIsProcessedUsingASpy(): void
     {
-        $gateway = Mockery::mock('PaymentGateway');
+        $order = new Order(10, 1200);
+        self::assertEquals(12000, $order->amount);
 
-        $gateway->shouldReceive('charge')
+        $mockGateway = Mockery::spy('PaymentGateway');
+        $order->proccess($mockGateway);
+
+        $mockGateway->shouldHaveReceived('charge')
             ->once()
-            ->with(200)
-            ->andReturn(true);
-
-        $order = new Order($gateway);
-        $order->amount = 200;
-        self::assertTrue($order->proccess());
+            ->with(12000);
     }
 }
