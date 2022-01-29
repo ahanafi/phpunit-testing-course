@@ -8,7 +8,7 @@ class ItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->item = new Item();
+        $this->item = new ItemChild();
     }
 
     public function testDescriptionIsNotEmpty():void
