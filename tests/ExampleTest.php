@@ -1,11 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class ExampleTest extends TestCase
+class ExampleTest extends MockeryTestCase
 {
-    public function testAddingTwoPlusTwoResultsInFour(): void
-    {
-        $this->assertEquals(4, 2 + 2);
-    }
+    /**
+     * Write test here...
+    */
 }
