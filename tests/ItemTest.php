@@ -4,20 +4,16 @@ use PHPUnit\Framework\TestCase;
 
 class ItemTest extends TestCase
 {
-    public Item $item;
-
-    protected function setUp(): void
+    public function testTokenIsAString():void
     {
-        $this->item = new ItemChild();
-    }
+        $item = new Item();
 
-    public function testDescriptionIsNotEmpty():void
-    {
-        self::assertNotEmpty($this->item->getDescription());
-    }
+        $reflector = new ReflectionClass(Item::class);
 
-    public function testIdIsAnInteger():void
-    {
-        self::assertIsInt($this->item->getId());
+        $method = $reflector->getMethod('getToken');
+        $method->setAccessible(true);
+        $result = $method->invoke($item);
+
+        self::assertIsString($result);
     }
 }
